@@ -30,6 +30,17 @@ export async function logout() {
   redirect('/login')
 }
 
+// ログインのパスワードを変える。全エージェントが同じユーザーなので、他のセッションは失効させない
+export async function changePassword(form: FormData) {
+  const { sb } = await requireUser('/password')
+  const pw = String(form.get('password') ?? '')
+  if (pw.length < 12) redirect('/password?error=short')
+  if (pw !== String(form.get('confirm') ?? '')) redirect('/password?error=mismatch')
+  const { error } = await sb.auth.updateUser({ password: pw })
+  if (error) redirect('/password?error=failed')
+  redirect('/password?done=1')
+}
+
 const AVATAR_MAX = 2 * 1024 * 1024
 
 async function uploadAvatar(sb: DB, accountId: string, file: File) {

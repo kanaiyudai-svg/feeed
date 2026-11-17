@@ -58,6 +58,9 @@ export default async function Accounts() {
         <input type="file" name="avatar" accept="image/*" />
         <button className="btn">追加</button>
       </form>
+      <p className="acct-logout">
+        <a href="/password">パスワードを変える</a>
+      </p>
       <form action={logout} className="acct-logout">
         <button>ログアウト</button>
       </form>
